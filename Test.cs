@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Diagnostics;
@@ -16,8 +16,8 @@ namespace Lab1CS
 
             Random rnd = new Random();
 
-            int iter = 100;
-
+            int iter = 10000;                              
+            
             for (int i = 0; i < iter; i++)
             {
                 int ops = rnd.Next(4);
@@ -28,24 +28,24 @@ namespace Lab1CS
                 {
                     case 0:
 
-
+                        
                         abstr.Add(value);
                         chain.Addit(value);
-                        doubly.Add(value);
+                        doubly.Add(value);    
                         break;
 
                     case 1:
-
+           
                         abstr.Del(pos);
                         chain.Delete(pos);
-                        doubly.Delete(pos);
+                        doubly.Delete(pos);     
                         break;
-
+                    
                     case 2:
 
                         abstr.Ins(value, pos);
                         chain.Insert(value, pos);
-                        doubly.Insert(value, pos);
+                        doubly.Insert(value, pos);                      
                         break;
 
                     /*case 3:                       
@@ -53,24 +53,24 @@ namespace Lab1CS
                         chain.Clear();
                         doubly.Clear();
                         break;*/
-
+                    
                     case 4:
 
                         abstr[pos] = value;
                         chain[pos] = value;
-                        doubly[pos] = value;
+                        doubly[pos] = value;                      
                         break;
                 }
-            }
+            }            
             void Checker()
             {
                 bool checker = true;
                 for (int i = 0; i < abstr.Count; i++)
                 {
-                    if (!(abstr[i] == chain[i] && abstr[i] == doubly[i] && chain[i] == doubly[i]))
+                    if (!(abstr[i] == chain[i] && abstr[i] == doubly[i] && chain[i] == doubly[i]))                    
                     {
                         checker = false;
-                        Console.WriteLine($"Не сошлись [{i}] у chain = {chain[i]}, у doubly = {doubly[i]}\n");
+                        Console.WriteLine($"Не сошлись [{i}] у chain = {chain[i]}, у doubly = {doubly[i]}\n"); 
                     }
                 }
                 if (checker == true) Console.WriteLine("Успешно\n");

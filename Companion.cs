@@ -1,0 +1,127 @@
+﻿using System;
+using System.Reflection;
+using System.Xml;
+
+namespace Lab1CS
+{
+    class CompanionList<T>
+    {       
+        public struct Element
+        {
+            public T Node { get; set; }
+            public int Pos { get; set; }
+            public Element(T node, int pos)
+            {
+                Node = node;
+                Pos = pos; 
+            }
+        }
+
+        const int interval = DoublyList.interval;
+        int cnt = 0;
+        Element[] buf = null;
+        int size = 1;
+        public int Find(int pos) 
+        {
+            if (pos == 0) return 0;
+            else
+            {
+                for (int i = 1; i < cnt; i++)
+                {
+                    if (buf[i].Pos == pos) return i;
+                }
+            }
+            throw new IndexOutOfRangeException("trouble in find companion");
+        }
+
+        public int FindClosest(int pos)
+        {
+            int closest = buf[0].Pos;
+            int diff = Math.Abs(closest - pos);
+
+            for (int i = 1; i < cnt; i++)
+            {
+                int check_el = buf[i].Pos;
+                if (Math.Abs(check_el - pos) < diff)
+                {                
+                    diff = Math.Abs(check_el - pos);
+                    closest = check_el;
+                }
+            }
+            int direction = pos - closest;
+            if (direction < 0) closest *= -1; // closest el is on the right side
+            
+            return closest;
+        }
+        public CompanionList()
+        {
+            buf = new Element[size];
+        }
+        public T this[int index]
+        {
+            get
+            {
+                if (index == 0) return buf[index].Node; 
+
+                else if (index < cnt)
+                {
+                    return buf[index].Node;
+                }
+                else throw new IndexOutOfRangeException("Indexator get trouble"); 
+            }
+
+            set
+            {
+                if (index < cnt)
+                { 
+                    buf[index].Node = value;
+                }
+                else throw new IndexOutOfRangeException("Indexator set pos trouble");
+            }
+        }
+        public T GetNode(int pos)
+        {
+            return buf[Find(pos)].Node;
+        }
+        public void SetNode(T node, int pos)
+        {
+            buf[Find(pos)].Node = node;
+            buf[Find(pos)].Pos = pos;
+        }
+
+        private void Expand()
+        {
+            size *= 2;
+            Array.Resize(ref buf, size);            
+        }
+        public void Append(T elem, int pos)
+        {
+            if (cnt >= size) Expand();
+            buf[cnt] = new Element(elem, pos);
+            cnt++;
+        }     
+        public void Delete(int index) 
+        {           
+            if (index == cnt - 1) 
+            {
+                buf[index] = default;
+                cnt--;
+            }
+            else throw new IndexOutOfRangeException("not last el was deleted");
+        }
+        public int Count
+        {
+            get { return cnt; }
+        } 
+
+        public void Clear()
+        {
+            for (int i = 0; i < cnt; i++)
+            {
+                buf[i] = default;
+            }
+            cnt = 0;
+        }
+       
+    }
+}
